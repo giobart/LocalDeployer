@@ -2,10 +2,10 @@
 Deploy fast and easily your applications to the local development IoT infrastructure
 
 ## How it works
-Install the server tool to all your RaspberryPi (& co), make sure to start it when the raspberry Boot.
+Install the server tool to all your RaspberryPi (& co), make sure to auto start the service on boot.
 Install the client application on your development machine.
 
-On your poroject just put a Deployment Descriptor in the project root like the following
+Now just put a Deployment Descriptor in the project root like in the following example:
 
 File: ` DEPLOY-DESCRIPTOR.py `
 
@@ -19,7 +19,7 @@ ON_DEPLOY_REBOOT=True
 ```
 Note that the mandatory part in the deployment descriptor is just the PROJECT_NAME 
 
-Now on your development machine, place yourself in the root folder of the project and type:
+Now on your development machine, from the root folder of the project type:
 
 `localdeployer deploy`
 
@@ -42,7 +42,7 @@ Have Fun!
 
 ## Client installing guide
 
-###TODO
+### TODO
 
 ## How to contribute
 
