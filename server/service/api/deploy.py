@@ -7,11 +7,30 @@ deploy = Blueprint('deploy_utils', __name__)
 
 @deploy.route('/is_alive',methods=['GET'])
 def ping_service():
-    #utility method used from the client to understood if the service is alive or not
+    """utility method used from the client to understood if the service is alive or not"""
     return 200
 
 @deploy.route("/new_deploy",methods=['POST'])
 def new_deploy():
+    """
+    Method invoked to trigger a new deploy.
+
+        Expected payload:
+
+        {
+            PROJECT_NAME:"My_Awsome_Project",
+            BASE64_ZIP: "base64 encoded .tar.gz file containing the project to deploy"
+            SET_AS_STARTUP_APPLICATION: True/False,
+            STARTUP-COMMAND:"python helloword.py (or wathever)"
+            ON_DEPLOY_REBOOT: True/False
+        }
+
+        This method will put the source code in a new folder named as the project_name in the configured deploy
+        directory and will set up the startup script if needed.
+        Nb. the deploy directory is the one in the config.py file
+
+    """
+
 
     payload = request.get_json()
 
