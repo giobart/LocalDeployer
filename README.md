@@ -17,7 +17,7 @@ STARTUP_COMMAND='python helloworld.py'
 SET_AS_STARTUP_APPLICATION=True
 ON_DEPLOY_REBOOT=True
 ```
-Note that the mandatory part in the deployment descriptor are just the PROJECT_NAME & STARTUP_COMMAND
+Note that the mandatory part in the deployment descriptor is just the PROJECT_NAME 
 
 Now on your development machine, place yourself in the root folder of the project and type:
 

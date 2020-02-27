@@ -1,0 +1,1 @@
+DEPLOY_FOLDER='/home/pi/localdeployer/deploy'
