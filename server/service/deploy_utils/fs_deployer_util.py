@@ -1,5 +1,6 @@
 import base64
 import os.path
+import os
 import tarfile
 
 from server.service.config import DEPLOY_FOLDER
@@ -37,4 +38,5 @@ def deploy_local(
                 app_list.write(str(new_line))
 
     #On deploy reboot
-    #TODO
+    if on_deploy_reboot:
+        os.system('sudo shutdown -r now')
