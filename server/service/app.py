@@ -1,6 +1,7 @@
 from flask import Flask
 from server.service.api import blueprints
 
+
 __all__ = ('create_app',)
 
 def create_app(config=None, app_name='service'):
