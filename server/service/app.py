@@ -1,8 +1,12 @@
 from flask import Flask
+import logging
 from server.service.api import blueprints
+from server.service.tasks.startup_app import time_loop
+from server.service.config import LOGGER_LEVEL
 
 
 __all__ = ('create_app',)
+
 
 def create_app(config=None, app_name='service'):
     '''
@@ -10,6 +14,7 @@ def create_app(config=None, app_name='service'):
     '''
 
     app = Flask(app_name)
+    app.logger.setLevel(LOGGER_LEVEL)
 
     if config:
         app.config.from_pyfile(config)
@@ -18,6 +23,7 @@ def create_app(config=None, app_name='service'):
         app.register_blueprint(bp)
         bp.app = app
 
+    time_loop.start(block=False)
     return app
 
 
