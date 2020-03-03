@@ -18,11 +18,11 @@ def new_deploy():
         Expected payload:
 
         {
-            PROJECT_NAME:"My_Awsome_Project",
-            BASE64_ZIP: "base64 encoded .tar.gz file containing the project to deploy"
-            SET_AS_STARTUP_APPLICATION: True/False,
-            STARTUP-COMMAND:"python helloword.py (or wathever)"
-            ON_DEPLOY_REBOOT: True/False
+            "PROJECT_NAME":"My_Awsome_Project",
+            "BASE64_ZIP": "base64 encoded .tar.gz file containing the project to deploy",
+            "SET_AS_STARTUP_APPLICATION": True/False,
+            "STARTUP-COMMAND":"python helloword.py (or wathever)",
+            "ON_DEPLOY_REBOOT": True/False
         }
 
         This method will put the source code in a new folder named as the project_name in the configured deploy
