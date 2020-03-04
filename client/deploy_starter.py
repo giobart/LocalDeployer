@@ -40,9 +40,9 @@ def execute_deploy(project_name, file_path, set_as_startup_application, startup_
 if __name__ == "__main__":
     execute_deploy(
         project_name="test",
-        file_path="/Users/giovannibartolomeo/Documents/Projects/python_hello_world",
+        file_path="<Path to file>",
         set_as_startup_application=True,
-        startup_command="python ./python_hello_world/helloworld.py",
+        startup_command="<startup command>",
         on_deploy_reboot=False,
         receiver="http://0.0.0.0:20002/new_deploy"
     )
