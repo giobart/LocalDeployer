@@ -14,7 +14,7 @@ deploy_new = {
 
 
 def execute_deploy(project_name, file_path, set_as_startup_application, startup_command, on_deploy_reboot, receiver):
-    # zip the prpoject folder
+    # zip the project folder
     tar_path = os.path.join(TARGET_FOLDER, project_name) + ".tar.gz"
     os.system("rm " + tar_path)  # delete tar if already present
     with tarfile.open(tar_path, "w:gz") as tar:
