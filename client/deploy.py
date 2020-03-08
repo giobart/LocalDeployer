@@ -80,8 +80,33 @@ def main(argv):
     if deploy_folder and deploy_folder:
         print(" ")
         print("_.-^-._.-*> Local Deployer <*-._.-^-._")
-        print(tabulate([["Deploy of the project : ", deploy_folder], ["Deploy machine: ", REMOTE_MACHINES[int(deploy_machine)]]]))
-        # TODO: call deploy function
+
+        # fetch deploy descriptor or ask for project name, startup command etc.
+        #TODO check descriptor
+
+        #ask project name, TODO ask only if deploy config file not present
+        proj_name_correct = False
+        project_name=""
+        while not proj_name_correct:
+            print('Enter project name name:')
+            project_name = input()
+            print('Project name: [ '+project_name+ ' ] is it correct? (y/n)')
+            if input()=='y':
+                proj_name_correct=True
+
+        #TODO ask project info if deploy file not present
+
+        #print deploy resume
+        print(tabulate(
+            [
+                ["Deploy of the project: ", deploy_folder],
+                ["Project Name: ", project_name],
+                ["Deploy machine: ", REMOTE_MACHINES[int(deploy_machine)]]]))
+        #TODO add missing info to resume
+
+        #TODO call execute deploy with the missing informations
+        execute_deploy(project_name=project_name,file_path=deploy_folder,set_as_startup_application=True,startup_command="",on_deploy_reboot="")
+        
     else:
         print("You must give -i (input folder) and -r (remote machine)")
         print_help()
