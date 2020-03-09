@@ -13,28 +13,33 @@ Content:
 
 ```
 {
-    'PROJECT_NAME':'My-awsome-project'
-    'STARTUP_COMMAND':'python helloworld.py'
-    'SET_AS_STARTUP_APPLICATION':True
-    'ON_DEPLOY_REBOOT':True
+    "PROJECT_NAME":"My-awsome-project"
+    "STARTUP_COMMAND":"python helloworld.py"
+    "SET_AS_STARTUP_APPLICATION":true
+    "ON_DEPLOY_REBOOT":true
 }
 ```
-Note that the mandatory part in the deployment descriptor is just the PROJECT_NAME 
+Note that the mandatory parts in the deployment descriptor are just the PROJECT_NAME and SET_AS_STARTUP_APPLICATION. <br>
+You must set ON_DEPLOY_REBOOT and STARTUP_COMMAND only if SET_AS_STARTUP_APPLICATION is True
 
-Now on your development machine, from the root folder of the project type:
 
-`localdeployer deploy`
+Run the client to perform the deploy with  
+`python deploy.py -i <input-folder> -r <remote-id>`
 
-All the local network available devices (where the server was installed) will be listed
+The list of all the configured remote-id device can be listed with
 
 ```
-$~ Availabe devices:
-$~ 1) raspberrypigio2
-$~ 2) raspberrypi5
-$~ Type the device number where you wish to deploy
+$~ python deploy.py -l
+
+####### Remote configured machines #######
+  Remote Id  Hostname/IP
+-----------  ---------------
+          0  raspberrypigio2
 ``` 
 
-now just type the number of the device where you want to deploy your code and that's it. 
+The listed devices are the ones configured into the config.py file ìn the line
+
+``` REMOTE_MACHINES = ["raspberrypigio2"] ```
 
 Have Fun!
 
