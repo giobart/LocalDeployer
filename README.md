@@ -7,15 +7,17 @@ Install the client application on your development machine.
 
 Now just put a Deployment Descriptor in the project root like in the following example:
 
-File: ` DEPLOY-DESCRIPTOR.py `
+File: ` DEPLOY-DESCRIPTOR.json `
 
 Content:
 
 ```
-PROJECT_NAME='My-awsome-project'
-STARTUP_COMMAND='python helloworld.py'
-SET_AS_STARTUP_APPLICATION=True
-ON_DEPLOY_REBOOT=True
+{
+    'PROJECT_NAME':'My-awsome-project'
+    'STARTUP_COMMAND':'python helloworld.py'
+    'SET_AS_STARTUP_APPLICATION':True
+    'ON_DEPLOY_REBOOT':True
+}
 ```
 Note that the mandatory part in the deployment descriptor is just the PROJECT_NAME 
 

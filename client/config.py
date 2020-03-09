@@ -1,2 +1,3 @@
 TARGET_FOLDER = "tarfolder/"
-REMOTE_MACHINES = ["raspberrypigio2.zapto.org"]
+REMOTE_MACHINES = ["raspberrypigio2"]
+DEPLOY_DESCRIPTOR_NAME = "DEPLOY_DESCRIPTOR.json"

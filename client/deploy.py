@@ -3,8 +3,9 @@ import tarfile
 import os
 import base64
 import sys, getopt
+import json
 from tabulate import tabulate
-from config import TARGET_FOLDER,REMOTE_MACHINES
+from config import TARGET_FOLDER, REMOTE_MACHINES, DEPLOY_DESCRIPTOR_NAME
 
 deploy_new = {
     "PROJECT_NAME": "",
@@ -61,9 +62,11 @@ def main(argv):
     deploy_machine = -1
     list = False
 
+    # Fetch command line argument
     for opt, arg in opts:
         if opt == '-h':
             print_help()
+            exit()
 
         # If -l (list) argument, give configured device list from config file
         if opt == '-l':
@@ -75,42 +78,45 @@ def main(argv):
         elif opt == '-i':
             deploy_folder = arg
         elif opt == '-r':
-            deploy_machine = arg
+            deploy_machine = REMOTE_MACHINES[int(arg)]
 
-    if deploy_folder and deploy_folder:
+    if deploy_folder and deploy_machine:
         print(" ")
         print("_.-^-._.-*> Local Deployer <*-._.-^-._")
 
-        # fetch deploy descriptor or ask for project name, startup command etc.
-        #TODO check descriptor
+        # Fetch deploy descriptor file
+        with open(os.path.join(deploy_folder, DEPLOY_DESCRIPTOR_NAME), "r") as deploy_descriptor_file:
+            deploy_descriptor = json.loads(deploy_descriptor_file.read())
+            project_name = deploy_descriptor['PROJECT_NAME']
+            set_as_startup_application = deploy_descriptor['SET_AS_STARTUP_APPLICATION']
+            startup_command = ""
+            on_deploy_reboot = False
+            if set_as_startup_application:
+                startup_command = deploy_descriptor['STARTUP_COMMAND']
+                on_deploy_reboot = deploy_descriptor['ON_DEPLOY_REBOOT']
 
-        #ask project name, TODO ask only if deploy config file not present
-        proj_name_correct = False
-        project_name=""
-        while not proj_name_correct:
-            print('Enter project name name:')
-            project_name = input()
-            print('Project name: [ '+project_name+ ' ] is it correct? (y/n)')
-            if input()=='y':
-                proj_name_correct=True
-
-        #TODO ask project info if deploy file not present
-
-        #print deploy resume
+        # Print deploy resume
         print(tabulate(
             [
                 ["Deploy of the project: ", deploy_folder],
                 ["Project Name: ", project_name],
-                ["Deploy machine: ", REMOTE_MACHINES[int(deploy_machine)]]]))
-        #TODO add missing info to resume
+                ["Deploy machine: ", deploy_machine]
+            ]))
 
-        #TODO call execute deploy with the missing informations
-        execute_deploy(project_name=project_name,file_path=deploy_folder,set_as_startup_application=True,startup_command="",on_deploy_reboot="")
-        
+        # Execute the deploy operation
+        execute_deploy(
+            project_name=project_name,
+            file_path=deploy_folder,
+            set_as_startup_application=set_as_startup_application,
+            startup_command=startup_command,
+            on_deploy_reboot=on_deploy_reboot,
+            receiver=deploy_machine
+        )
+
+    # If deploy machine or deploy folder missing -> error
     else:
         print("You must give -i (input folder) and -r (remote machine)")
         print_help()
-
 
 
 if __name__ == "__main__":
