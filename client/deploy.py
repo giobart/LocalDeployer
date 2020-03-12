@@ -5,7 +5,7 @@ import base64
 import sys, getopt
 import json
 from tabulate import tabulate
-from config import TARGET_FOLDER, REMOTE_MACHINES, DEPLOY_DESCRIPTOR_NAME
+from config import TARGET_FOLDER, REMOTE_MACHINES, DEPLOY_DESCRIPTOR_NAME, SERVER_PORT
 
 deploy_new = {
     "PROJECT_NAME": "",
@@ -37,7 +37,7 @@ def send_deploy(project_name, file_path, set_as_startup_application, startup_com
 
     # send request
     print(deploy_new)
-    response = requests.post(url=receiver, json=deploy_new)
+    response = requests.post(url="http://" + receiver + ":" + SERVER_PORT + "/new_deploy", json=deploy_new)
     print(str(response))
 
 
@@ -78,6 +78,21 @@ def deploy(deploy_folder, deploy_machine):
     )
 
 
+def generate_deploy_list():
+    # TODO: contact all the configured machine and ask for the list of deployed app, then print it.
+    raise NotImplemented()
+
+
+def remove_deploy(deploy_machine, deploy_id):
+    print("Removing project with id: " + str(deploy_id) + " in the machine " + deploy_machine + " ... ... ...")
+    response = requests.delete(url="http://" + deploy_machine + ":" + SERVER_PORT + "/deploy/" + str(deploy_id))
+    if response.status_code == 200:
+        print("### SUCCEDED ###")
+    else:
+        print("## Failed ##")
+        print(str(response))
+
+
 def print_help():
     print("_.-^-._.-*> Local Deployer <*-._.-^-._")
     print("Usage: \n")
@@ -94,15 +109,15 @@ def print_help():
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "hi:r:l")
+        opts, args = getopt.getopt(argv, "hi:r:d:la")
     except getopt.GetoptError:
         print
         'deploy.py -i <input-folder> -r <remote-id>'
         sys.exit(2)
 
     deploy_folder = ""
-    deploy_machine = -1
-    list = False
+    deploy_machine = ""
+    deploy_id = -1
 
     # Fetch command line argument
     for opt, arg in opts:
@@ -116,15 +131,24 @@ def main(argv):
             print(tabulate(enumerate(REMOTE_MACHINES, start=0), headers=['Remote Id', 'Hostname/IP']))
             exit()
 
-        # Save input deploy folder and output remote machine
+        # If -a argument given, give the list of all deployed projects
+        if opt == '-a':
+            generate_deploy_list()
+
+        # Save input deploy folder, output remote machine and deploy_id if given
         elif opt == '-i':
             deploy_folder = arg
         elif opt == '-r':
             deploy_machine = REMOTE_MACHINES[int(arg)]
+        elif opt == '-d':
+            deploy_id = int(arg)
 
     # If deploy folder and deploy machine given => start new deploy
     if deploy_folder and deploy_machine:
         deploy(deploy_folder, deploy_machine)
+    # If deploy id and deploy machine given => delete existing deploy
+    elif deploy_machine and deploy_id >= 0:
+        remove_deploy(deploy_machine, deploy_id)
     # If deploy machine or deploy folder missing -> error
     else:
         print("You must give -i (input folder) and -r (remote machine)")
