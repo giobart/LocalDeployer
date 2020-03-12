@@ -16,7 +16,8 @@ deploy_new = {
 }
 
 
-def execute_deploy(project_name, file_path, set_as_startup_application, startup_command, on_deploy_reboot, receiver):
+def send_deploy(project_name, file_path, set_as_startup_application, startup_command, on_deploy_reboot, receiver):
+    """ Send the configured deploy files to a remote machine  """
     # zip the project folder
     tar_path = os.path.join(TARGET_FOLDER, project_name) + ".tar.gz"
     os.system("rm " + tar_path)  # delete tar if already present
@@ -40,13 +41,54 @@ def execute_deploy(project_name, file_path, set_as_startup_application, startup_
     print(str(response))
 
 
+def deploy(deploy_folder, deploy_machine):
+    """ Read deploy descriptor of a given project and deploy it to the given machine.
+    It calls send_deploy to contact the remote machine"""
+
+    print(" ")
+    print("_.-^-._.-*> Local Deployer <*-._.-^-._")
+
+    # Fetch deploy descriptor file
+    with open(os.path.join(deploy_folder, DEPLOY_DESCRIPTOR_NAME), "r") as deploy_descriptor_file:
+        deploy_descriptor = json.loads(deploy_descriptor_file.read())
+        project_name = deploy_descriptor['PROJECT_NAME']
+        set_as_startup_application = deploy_descriptor['SET_AS_STARTUP_APPLICATION']
+        startup_command = ""
+        on_deploy_reboot = False
+        if set_as_startup_application:
+            startup_command = deploy_descriptor['STARTUP_COMMAND']
+            on_deploy_reboot = deploy_descriptor['ON_DEPLOY_REBOOT']
+
+    # Print deploy resume
+    print(tabulate(
+        [
+            ["Deploy of the project: ", deploy_folder],
+            ["Project Name: ", project_name],
+            ["Deploy machine: ", deploy_machine]
+        ]))
+
+    # Send the deploy to remote machine
+    send_deploy(
+        project_name=project_name,
+        file_path=deploy_folder,
+        set_as_startup_application=set_as_startup_application,
+        startup_command=startup_command,
+        on_deploy_reboot=on_deploy_reboot,
+        receiver=deploy_machine
+    )
+
+
 def print_help():
     print("_.-^-._.-*> Local Deployer <*-._.-^-._")
-    print("Usage:")
+    print("Usage: \n")
     print("#deploy project in the folder <input-folder> into remote machine with id <remote-di>")
-    print("deploy.py -i <input-folder> -r <remote-id>")
+    print("deploy.py -i <input-folder> -r <remote-id> \n")
     print("#list all the current configured remote machines")
-    print("deploy -l")
+    print("deploy.py -l \n")
+    print("#list all the deployed applications")
+    print("deploy.py -a \n")
+    print("#Delete a deploy in a remote machine")
+    print("deploy.py -d <deploy-id> -r <remote-id> \n")
     print("_.-^-._.-*><*-._.-^-._.-*><*-._.-^-._")
 
 
@@ -80,39 +122,9 @@ def main(argv):
         elif opt == '-r':
             deploy_machine = REMOTE_MACHINES[int(arg)]
 
+    # If deploy folder and deploy machine given => start new deploy
     if deploy_folder and deploy_machine:
-        print(" ")
-        print("_.-^-._.-*> Local Deployer <*-._.-^-._")
-
-        # Fetch deploy descriptor file
-        with open(os.path.join(deploy_folder, DEPLOY_DESCRIPTOR_NAME), "r") as deploy_descriptor_file:
-            deploy_descriptor = json.loads(deploy_descriptor_file.read())
-            project_name = deploy_descriptor['PROJECT_NAME']
-            set_as_startup_application = deploy_descriptor['SET_AS_STARTUP_APPLICATION']
-            startup_command = ""
-            on_deploy_reboot = False
-            if set_as_startup_application:
-                startup_command = deploy_descriptor['STARTUP_COMMAND']
-                on_deploy_reboot = deploy_descriptor['ON_DEPLOY_REBOOT']
-
-        # Print deploy resume
-        print(tabulate(
-            [
-                ["Deploy of the project: ", deploy_folder],
-                ["Project Name: ", project_name],
-                ["Deploy machine: ", deploy_machine]
-            ]))
-
-        # Execute the deploy operation
-        execute_deploy(
-            project_name=project_name,
-            file_path=deploy_folder,
-            set_as_startup_application=set_as_startup_application,
-            startup_command=startup_command,
-            on_deploy_reboot=on_deploy_reboot,
-            receiver=deploy_machine
-        )
-
+        deploy(deploy_folder, deploy_machine)
     # If deploy machine or deploy folder missing -> error
     else:
         print("You must give -i (input folder) and -r (remote machine)")
