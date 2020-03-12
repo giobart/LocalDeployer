@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from server.service.deploy_utils.fs_deployer_util import deploy_local
+from server.service.deploy_utils.fs_deployer_util import deploy_local, deploy_list, deploy_delete
 
 deploy = Blueprint('deploy_utils', __name__)
 
@@ -8,6 +8,19 @@ deploy = Blueprint('deploy_utils', __name__)
 def ping_service():
     """utility method used from the client to understood if the service is alive or not"""
     return "", 200
+
+
+@deploy.route('/deploy/<int:deploy_id>', methods=['DELETE'])
+def delete_deploy(deploy_id):
+    """Delete the deploy marked with id deploy_id"""
+    deploy_delete(deploy_id)
+    return "", 200
+
+
+@deploy.route('/deploy', methods=['GET'])
+def list_deploy():
+    """List of the current deploy applications"""
+    return (str(deploy_list())), 200
 
 
 @deploy.route("/new_deploy", methods=['POST'])
