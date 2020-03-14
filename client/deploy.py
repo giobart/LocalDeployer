@@ -79,8 +79,14 @@ def deploy(deploy_folder, deploy_machine):
 
 
 def generate_deploy_list():
-    # TODO: contact all the configured machine and ask for the list of deployed app, then print it.
-    raise NotImplemented()
+    # for each machine configured in the system
+    for remote_id, machine in enumerate(REMOTE_MACHINES, start=0):
+        print("\n Contacting: [" + machine +"] with REMOTE_ID: " + str(remote_id) + "\n")
+        # contact get deploy list endpoint
+        response = requests.get("http://"+machine+":"+SERVER_PORT+"/deploy")
+        deploy_dict = response.json()
+        # print deploy information
+        print(tabulate(deploy_dict.items(),headers=["Deploy_ID", "Project Name"]))
 
 
 def remove_deploy(deploy_machine, deploy_id):
@@ -134,6 +140,7 @@ def main(argv):
         # If -a argument given, give the list of all deployed projects
         if opt == '-a':
             generate_deploy_list()
+            exit()
 
         # Save input deploy folder, output remote machine and deploy_id if given
         elif opt == '-i':

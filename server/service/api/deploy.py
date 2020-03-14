@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+import json
 from server.service.deploy_utils.fs_deployer_util import deploy_local, deploy_list, deploy_delete
 
 deploy = Blueprint('deploy_utils', __name__)
@@ -20,7 +21,7 @@ def delete_deploy(deploy_id):
 @deploy.route('/deploy', methods=['GET'])
 def list_deploy():
     """List of the current deploy applications"""
-    return (str(deploy_list())), 200
+    return (json.dumps(deploy_list())), 200
 
 
 @deploy.route("/new_deploy", methods=['POST'])
