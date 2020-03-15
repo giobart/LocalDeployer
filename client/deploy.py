@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import requests
 import tarfile
 import os
@@ -5,7 +8,12 @@ import base64
 import sys, getopt
 import json
 from tabulate import tabulate
-from config import TARGET_FOLDER, REMOTE_MACHINES, DEPLOY_DESCRIPTOR_NAME, SERVER_PORT
+from os.path import expanduser
+
+TARGET_FOLDER = os.path.join(expanduser("~"), "local-deployer-tarfolder/")
+REMOTE_MACHINES = ["0.0.0.0"]
+DEPLOY_DESCRIPTOR_NAME = "DEPLOY_DESCRIPTOR.json"
+SERVER_PORT = "20002"
 
 deploy_new = {
     "PROJECT_NAME": "",
