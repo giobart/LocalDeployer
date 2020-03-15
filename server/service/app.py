@@ -1,8 +1,7 @@
 from flask import Flask
-import logging
-from server.service.api import blueprints
-from server.service.tasks.startup_app import time_loop
-from server.service.config import LOGGER_LEVEL
+from service.api import blueprints
+from service.tasks.startup_app import time_loop
+from service.config import LOGGER_LEVEL
 
 
 __all__ = ('create_app',)

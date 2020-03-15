@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 import json
-from server.service.deploy_utils.fs_deployer_util import deploy_local, deploy_list, deploy_delete
+from service.deploy_utils.fs_deployer_util import deploy_local, deploy_list, deploy_delete
 
 deploy = Blueprint('deploy_utils', __name__)
 

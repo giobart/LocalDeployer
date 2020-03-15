@@ -3,7 +3,7 @@ import os.path
 import os
 import tarfile
 import logging
-from server.service.config import DEPLOY_FOLDER,DEPLOYED_APP_FILE, DEPLOY_FOLDER
+from service.config import DEPLOY_FOLDER,DEPLOYED_APP_FILE, DEPLOY_FOLDER
 
 logger = logging.getLogger("service")
 WORKING_DIR = os.getcwd()

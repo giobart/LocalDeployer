@@ -1,7 +1,7 @@
 from datetime import timedelta
 from timeloop import Timeloop
 import logging
-from server.service.config import DEPLOYED_APP_FILE,DEPLOY_FOLDER,LOGGER_LEVEL
+from service.config import DEPLOYED_APP_FILE,DEPLOY_FOLDER,LOGGER_LEVEL
 import os
 
 time_loop = Timeloop()

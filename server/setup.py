@@ -1,4 +1,3 @@
-import sys
 from setuptools import setup, find_packages
 
 install_requires=[]
@@ -11,7 +10,7 @@ try:
 except Exception as e:
     print(e)
 
-setup(name='auth',
+setup(name='LocalDeploy',
       version="0.1",
       packages=find_packages(),
       zip_safe=False,
