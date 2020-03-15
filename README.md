@@ -1,11 +1,11 @@
 # LocalDeployer
-Deploy fast and easily your applications to the local development IoT infrastructure
+Deploy fast and easily your applications to your own local network development IoT infrastructure
 
 ## How it works
 Install the server tool to all your RaspberryPi (& co), make sure to auto start the service on boot.
 Install the client application on your development machine.
 
-Now just put a Deployment Descriptor in the project root like in the following example:
+Now just put a Deployment Descriptor in the project root like the one in the following example:
 
 File: ` DEPLOY-DESCRIPTOR.json `
 
@@ -23,8 +23,8 @@ Note that the mandatory parts in the deployment descriptor are just the PROJECT_
 You must set ON_DEPLOY_REBOOT and STARTUP_COMMAND only if SET_AS_STARTUP_APPLICATION is True
 
 
-Run the client to perform the deploy with  
-`python deploy.py -i <input-folder> -r <remote-id>`
+Now to deploy this file to your IoT device just run:
+`ldeploy -i <input-folder> -r <remote-id>`
 
 The list of all the configured remote-id device can be listed with
 
@@ -37,9 +37,12 @@ $~ python deploy.py -l
           0  raspberrypigio2
 ``` 
 
-The listed devices are the ones configured into the config.py file ìn the line
+To add new devices after the installation of the client edit the script file as following:
 
-``` REMOTE_MACHINES = ["raspberrypigio2"] ```
+``` nano /usr/local/bin/ldeploy ```
+
+now add the device as a string, comma separated to the following array variable like the following example:
+``` REMOTE_MACHINES = ["raspberrypigio2","new_device_ip"] ```
 
 Have Fun!
 
@@ -47,13 +50,15 @@ Have Fun!
 
 ### TODO
 
-## Client installing guide
+## Client installing guide Linux/MacOs
 
-### TODO
+1) Clone the repository anywhere in your device
+2) Navigate into the client folder `cd client/`
+3) Now just run the install script with `sh install.sh`
 
 ## How to contribute
 
-Fell free to open issues, improve the code quality, add and propose features or whatever you have in your mind. 
+Feel free to open issues, improve the code quality, add and propose features or whatever you have in your mind. 
 
 ## Disclaimer
 
